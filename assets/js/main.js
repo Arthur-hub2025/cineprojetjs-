@@ -23,6 +23,15 @@ function setActiveFilter(container, activeBtn) {
     activeBtn.classList.add('active');
 }
 
+async function testApiConnection() {
+    try {
+        const data = await api.getTrending('day');
+        console.log(`API connectée — ${data.results.length} tendances reçues`);
+    } catch (err) {
+        console.error('Connexion API échouée :', err.message);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('main.js chargé');
+    testApiConnection();
 });

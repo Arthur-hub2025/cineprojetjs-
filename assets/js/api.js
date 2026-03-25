@@ -1,6 +1,6 @@
 class TMDBApi {
     constructor() {
-        this.apiKey = 'VOTRE_CLE_API';
+        this.apiKey = 'a4b2cba3499888d7a6e87f9a20857039';
         this.baseUrl = 'https://api.themoviedb.org/3';
         this.imgBaseUrl = 'https://image.tmdb.org/t/p/w500';
         this.language = 'fr-FR';
