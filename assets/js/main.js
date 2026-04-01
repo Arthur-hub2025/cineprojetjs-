@@ -43,6 +43,16 @@ async function loadSeries(category = 'popular') {
     }
 }
 
+async function loadMovies(category = 'popular') {
+    try {
+        const data = await api.getMovies(category);
+        renderCards('grid-films', data.results, 'movie');
+    } catch (err) {
+        const grid = document.getElementById('grid-films');
+        if (grid) grid.innerHTML = '<p class="grid-empty">Impossible de charger les films.</p>';
+    }
+}
+
 function initTrendingFilters() {
     const container = document.getElementById('filters-tendances');
     if (!container) return;
@@ -67,9 +77,23 @@ function initSeriesFilters() {
     });
 }
 
+function initMovieFilters() {
+    const container = document.getElementById('filters-films');
+    if (!container) return;
+
+    container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setActiveFilter(container, btn);
+            loadMovies(btn.dataset.filter);
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadTrending('day');
     loadSeries('popular');
+    loadMovies('popular');
     initTrendingFilters();
     initSeriesFilters();
+    initMovieFilters();
 });
