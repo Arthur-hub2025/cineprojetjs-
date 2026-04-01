@@ -23,15 +23,16 @@ function setActiveFilter(container, activeBtn) {
     activeBtn.classList.add('active');
 }
 
-async function testApiConnection() {
+async function loadTrending(timeWindow = 'day') {
     try {
-        const data = await api.getTrending('day');
-        console.log(`API connectée — ${data.results.length} tendances reçues`);
+        const data = await api.getTrending(timeWindow);
+        renderCards('grid-tendances', data.results, null);
     } catch (err) {
-        console.error('Connexion API échouée :', err.message);
+        const grid = document.getElementById('grid-tendances');
+        if (grid) grid.innerHTML = '<p class="grid-empty">Impossible de charger les tendances.</p>';
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    testApiConnection();
+    loadTrending('day');
 });
