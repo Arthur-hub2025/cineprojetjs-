@@ -54,3 +54,22 @@ function initTrendingFilters() {
         });
     });
 }
+
+function initSeriesFilters() {
+    const container = document.getElementById('filters-series');
+    if (!container) return;
+
+    container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setActiveFilter(container, btn);
+            loadSeries(btn.dataset.filter);
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadTrending('day');
+    loadSeries('popular');
+    initTrendingFilters();
+    initSeriesFilters();
+});
