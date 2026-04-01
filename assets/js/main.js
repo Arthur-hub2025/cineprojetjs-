@@ -33,6 +33,16 @@ async function loadTrending(timeWindow = 'day') {
     }
 }
 
+async function loadSeries(category = 'popular') {
+    try {
+        const data = await api.getSeries(category);
+        renderCards('grid-series', data.results, 'tv');
+    } catch (err) {
+        const grid = document.getElementById('grid-series');
+        if (grid) grid.innerHTML = '<p class="grid-empty">Impossible de charger les séries.</p>';
+    }
+}
+
 function initTrendingFilters() {
     const container = document.getElementById('filters-tendances');
     if (!container) return;
@@ -47,5 +57,6 @@ function initTrendingFilters() {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadTrending('day');
+    loadSeries('popular');
     initTrendingFilters();
 });
