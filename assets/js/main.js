@@ -33,6 +33,19 @@ async function loadTrending(timeWindow = 'day') {
     }
 }
 
+function initTrendingFilters() {
+    const container = document.getElementById('filters-tendances');
+    if (!container) return;
+
+    container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setActiveFilter(container, btn);
+            loadTrending(btn.dataset.filter);
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadTrending('day');
+    initTrendingFilters();
 });
