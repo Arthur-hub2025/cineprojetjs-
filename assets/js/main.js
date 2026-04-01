@@ -54,9 +54,3 @@ function initTrendingFilters() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadTrending('day');
-    loadSeries('popular');
-    initTrendingFilters();
-});
