@@ -7,9 +7,62 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <script src="assets/js/api.js"></script>
-    <script src="assets/js/classes/MediaCard.js"></script>
-    <script src="assets/js/classes/MediaDetails.js"></script>
-    <script src="assets/js/focus.js"></script>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">CinéSite</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html#tendances">Tendances</a></li>
+                    <li><a href="index.html#series">Séries</a></li>
+                    <li><a href="index.html#films">Films</a></li>
+                </ul>
+            </nav>
+            <a href="index.html" class="back-link">← Retour</a>
+        </div>
+    </header>
+
+    <main class="focus-main" id="focus-main">
+
+        <div class="focus-backdrop" id="focus-backdrop"></div>
+
+        <div class="focus-content">
+
+            <aside class="focus-poster">
+                <img id="focus-poster-img" src="assets/img/default.jpg" alt="">
+            </aside>
+
+            <section class="focus-details">
+
+                <h1 class="focus-title" id="focus-title">Chargement...</h1>
+
+                <p class="focus-tagline" id="focus-tagline"></p>
+
+                <ul class="focus-meta" id="focus-meta">
+                    <li class="focus-meta__item" id="focus-date"></li>
+                    <li class="focus-meta__item" id="focus-runtime"></li>
+                    <li class="focus-meta__item focus-meta__rating" id="focus-rating"></li>
+                </ul>
+
+                <div class="focus-genres" id="focus-genres"></div>
+
+                <div class="focus-overview">
+                    <h2>Synopsis</h2>
+                    <p id="focus-overview">Chargement...</p>
+                </div>
+
+            </section>
+
+        </div>
+
+        <section class="focus-casting" id="focus-casting">
+            <h2>Casting</h2>
+            <div class="casting-grid" id="casting-grid"></div>
+        </section>
+
+    </main>
+
+   
+
 </body>
 </html>
