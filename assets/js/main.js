@@ -53,6 +53,56 @@ async function loadMovies(category = 'popular') {
     }
 }
 
+function showSearchSection() {
+    document.getElementById('tendances').classList.add('hidden');
+    document.getElementById('series').classList.add('hidden');
+    document.getElementById('films').classList.add('hidden');
+    document.getElementById('recherche').classList.remove('hidden');
+}
+
+function hideSearchSection() {
+    document.getElementById('tendances').classList.remove('hidden');
+    document.getElementById('series').classList.remove('hidden');
+    document.getElementById('films').classList.remove('hidden');
+    document.getElementById('recherche').classList.add('hidden');
+}
+
+async function searchMedia(query) {
+    const trimmed = query.trim();
+
+    if (!trimmed) {
+        hideSearchSection();
+        return;
+    }
+
+    showSearchSection();
+
+    const grid = document.getElementById('grid-recherche');
+    const emptyMsg = document.getElementById('search-empty');
+
+    grid.innerHTML = '';
+    emptyMsg.classList.add('hidden');
+
+    try {
+        const data = await api.searchMulti(trimmed);
+        const filtered = data.results.filter(item =>
+            item.media_type === 'movie' || item.media_type === 'tv'
+        );
+
+        if (filtered.length === 0) {
+            emptyMsg.classList.remove('hidden');
+            return;
+        }
+
+        filtered.forEach(item => {
+            const card = new MediaCard(item, item.media_type);
+            grid.appendChild(card.render(api.imgBaseUrl));
+        });
+    } catch (err) {
+        grid.innerHTML = '<p class="grid-empty">Une erreur est survenue lors de la recherche.</p>';
+    }
+}
+
 function initTrendingFilters() {
     const container = document.getElementById('filters-tendances');
     if (!container) return;
@@ -89,6 +139,23 @@ function initMovieFilters() {
     });
 }
 
+function initSearch() {
+    const form = document.getElementById('search-form');
+    const input = document.getElementById('search-input');
+    if (!form || !input) return;
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        searchMedia(input.value);
+    });
+
+    input.addEventListener('input', () => {
+        if (input.value.trim() === '') {
+            hideSearchSection();
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadTrending('day');
     loadSeries('popular');
@@ -96,4 +163,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initTrendingFilters();
     initSeriesFilters();
     initMovieFilters();
+    initSearch();
 });
