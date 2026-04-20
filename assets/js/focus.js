@@ -7,13 +7,29 @@ function getUrlParams() {
     return { id, type };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const { id, type } = getUrlParams();
+function showError(message) {
+    const main = document.getElementById('focus-main');
+    if (!main) return;
+    main.innerHTML = `
+        <div class="focus-error">
+            <p>${message}</p>
+            <a href="index.html">← Retour à l'accueil</a>
+        </div>
+    `;
+}
 
+async function loadFocusPage(id, type) {
     if (!id || !type) {
-        console.warn('Paramètres URL manquants');
+        showError('Paramètres manquants dans l\'URL.');
         return;
     }
 
-    console.log(`focus.js chargé — id: ${id}, type: ${type}`);
+    if (type !== 'movie' && type !== 'tv') {
+        showError('Type de média non reconnu.');
+        return;
+    }}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const { id, type } = getUrlParams();
+    loadFocusPage(id, type);
 });
