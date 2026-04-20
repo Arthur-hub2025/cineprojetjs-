@@ -27,7 +27,22 @@ async function loadFocusPage(id, type) {
     if (type !== 'movie' && type !== 'tv') {
         showError('Type de média non reconnu.');
         return;
-    }}
+    }
+
+    try {
+        let data;
+        if (type === 'movie') {
+            data = await api.getMovieDetails(id);
+        } else {
+            data = await api.getSeriesDetails(id);
+        }
+
+        const media = new MediaDetails(data, type);
+        console.log(`Détails chargés : ${media.title}`);
+    } catch (err) {
+        showError('Impossible de charger les détails. Veuillez réessayer.');
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const { id, type } = getUrlParams();
