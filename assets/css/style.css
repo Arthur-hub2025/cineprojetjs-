@@ -406,3 +406,15 @@ input {
     .casting-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
     .focus-details .focus-title { font-size: 1.2rem; }
 }
+.focus-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    min-height: 300px;
+    color: var(--color-text-muted);
+    & a { color: var(--color-primary); }
+}
