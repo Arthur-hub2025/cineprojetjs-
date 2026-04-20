@@ -105,10 +105,16 @@ input {
     gap: var(--spacing-lg);
 }
 
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .media-card {
     background-color: var(--color-surface);
     border-radius: var(--radius-md);
     overflow: hidden;
+    animation: fadeInUp 0.3s ease both;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     &:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
 
@@ -344,12 +350,26 @@ input {
     border-radius: var(--radius-md);
     overflow: hidden;
     text-align: center;
+    animation: fadeInUp 0.3s ease both;
     & img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background-color: var(--color-surface-alt); }
     & .actor-card__info {
         padding: var(--spacing-sm);
         & .actor-card__name { font-size: 0.8rem; font-weight: 600; line-height: 1.3; }
         & .actor-card__role { font-size: 0.75rem; color: var(--color-text-muted); margin-top: 2px; }
     }
+}
+
+.focus-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    min-height: 300px;
+    color: var(--color-text-muted);
+    & a { color: var(--color-primary); }
 }
 
 @media (max-width: 1024px) {
@@ -405,34 +425,4 @@ input {
 
     .casting-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
     .focus-details .focus-title { font-size: 1.2rem; }
-}
-.focus-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-xl);
-    text-align: center;
-    min-height: 300px;
-    color: var(--color-text-muted);
-    & a { color: var(--color-primary); }
-}
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.media-card {
-    animation: fadeInUp 0.3s ease both;
-}
-
-.actor-card {
-    animation: fadeInUp 0.3s ease both;
 }
