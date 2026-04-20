@@ -77,6 +77,41 @@ function renderDetails(media) {
     if (overviewEl) overviewEl.textContent = media.overview;
 }
 
+function renderCasting(cast) {
+    const grid = document.getElementById('casting-grid');
+    if (!grid) return;
+
+    const top8 = cast.slice(0, 8);
+
+    if (top8.length === 0) {
+        grid.innerHTML = '<p class="grid-empty">Aucun acteur disponible.</p>';
+        return;
+    }
+
+    top8.forEach(actor => {
+        const photoUrl = actor.profile_path
+            ? api.imgBaseUrl + actor.profile_path
+            : 'assets/img/default.jpg';
+
+        const card = document.createElement('div');
+        card.classList.add('actor-card');
+        card.innerHTML = `
+            <img src="${photoUrl}" alt="${actor.name}" loading="lazy">
+            <div class="actor-card__info">
+                <p class="actor-card__name">${actor.name}</p>
+                <p class="actor-card__role">${actor.character || ''}</p>
+            </div>
+        `;
+
+        const img = card.querySelector('img');
+        img.addEventListener('error', () => {
+            img.src = 'assets/img/default.jpg';
+        });
+
+        grid.appendChild(card);
+    });
+}
+
 async function loadFocusPage(id, type) {
     if (!id || !type) {
         showError('Paramètres manquants dans l\'URL.');
@@ -90,14 +125,19 @@ async function loadFocusPage(id, type) {
 
     try {
         let data;
+        let credits;
+
         if (type === 'movie') {
             data = await api.getMovieDetails(id);
+            credits = await api.getMovieCredits(id);
         } else {
             data = await api.getSeriesDetails(id);
+            credits = await api.getSeriesCredits(id);
         }
 
         const media = new MediaDetails(data, type);
         renderDetails(media);
+        renderCasting(credits.cast);
     } catch (err) {
         showError('Impossible de charger les détails. Veuillez réessayer.');
     }
