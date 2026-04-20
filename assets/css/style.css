@@ -418,3 +418,21 @@ input {
     color: var(--color-text-muted);
     & a { color: var(--color-primary); }
 }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.media-card {
+    animation: fadeInUp 0.3s ease both;
+}
+
+.actor-card {
+    animation: fadeInUp 0.3s ease both;
+}
