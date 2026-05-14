@@ -2,9 +2,10 @@ const api = new TMDBApi();
 
 function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const type = params.get('type');
-    return { id, type };
+    return {
+        id: params.get('id'),
+        type: params.get('type')
+    };
 }
 
 function showError(message) {
@@ -18,63 +19,57 @@ function showError(message) {
     `;
 }
 
+function setEl(id, fn) {
+    const el = document.getElementById(id);
+    if (el) fn(el);
+}
+
 function renderDetails(media) {
     document.title = `${media.title} — CinéSite`;
 
-    const backdrop = document.getElementById('focus-backdrop');
     const backdropUrl = media.getBackdropUrl(api.imgBaseUrl);
-    if (backdrop && backdropUrl) {
-        backdrop.style.backgroundImage = `url(${backdropUrl})`;
-    }
+    setEl('focus-backdrop', el => {
+        if (backdropUrl) el.style.backgroundImage = `url(${backdropUrl})`;
+    });
 
-    const posterImg = document.getElementById('focus-poster-img');
-    if (posterImg) {
-        posterImg.src = media.getPosterUrl(api.imgBaseUrl);
-        posterImg.alt = media.title;
-        posterImg.addEventListener('error', () => {
-            posterImg.src = 'assets/img/default.jpg';
-        });
-    }
+    setEl('focus-poster-img', el => {
+        el.src = media.getPosterUrl(api.imgBaseUrl);
+        el.alt = media.title;
+        el.addEventListener('error', () => { el.src = 'assets/img/default.jpg'; });
+    });
 
-    const titleEl = document.getElementById('focus-title');
-    if (titleEl) titleEl.textContent = media.title;
+    setEl('focus-title', el => el.textContent = media.title);
 
-    const taglineEl = document.getElementById('focus-tagline');
-    if (taglineEl) {
-        taglineEl.textContent = media.tagline || '';
-        if (!media.tagline) taglineEl.classList.add('hidden');
-    }
+    setEl('focus-tagline', el => {
+        el.textContent = media.tagline || '';
+        if (!media.tagline) el.classList.add('hidden');
+    });
 
-    const dateEl = document.getElementById('focus-date');
-    if (dateEl) dateEl.textContent = media.formatDate(media.date);
+    setEl('focus-date', el => el.textContent = media.formatDate(media.date));
 
-    const runtimeEl = document.getElementById('focus-runtime');
-    if (runtimeEl) {
+    setEl('focus-runtime', el => {
         if (media.type === 'movie' && media.runtime) {
-            runtimeEl.textContent = media.formatRuntime(media.runtime);
+            el.textContent = media.formatRuntime(media.runtime);
         } else if (media.type === 'tv' && media.seasons) {
-            runtimeEl.textContent = `${media.seasons} saison${media.seasons > 1 ? 's' : ''}`;
+            el.textContent = `${media.seasons} saison${media.seasons > 1 ? 's' : ''}`;
         } else {
-            runtimeEl.classList.add('hidden');
+            el.classList.add('hidden');
         }
-    }
+    });
 
-    const ratingEl = document.getElementById('focus-rating');
-    if (ratingEl) ratingEl.textContent = `⭐ ${media.formatRating(media.rating)}`;
+    setEl('focus-rating', el => el.textContent = `⭐ ${media.formatRating(media.rating)}`);
 
-    const genresEl = document.getElementById('focus-genres');
-    if (genresEl) {
-        genresEl.innerHTML = '';
+    setEl('focus-genres', el => {
+        el.innerHTML = '';
         media.genres.forEach(genre => {
             const tag = document.createElement('span');
             tag.classList.add('genre-tag');
             tag.textContent = genre.name;
-            genresEl.appendChild(tag);
+            el.appendChild(tag);
         });
-    }
+    });
 
-    const overviewEl = document.getElementById('focus-overview');
-    if (overviewEl) overviewEl.textContent = media.overview;
+    setEl('focus-overview', el => el.textContent = media.overview);
 }
 
 function renderCasting(cast) {
@@ -104,9 +99,7 @@ function renderCasting(cast) {
         `;
 
         const img = card.querySelector('img');
-        img.addEventListener('error', () => {
-            img.src = 'assets/img/default.jpg';
-        });
+        img.addEventListener('error', () => { img.src = 'assets/img/default.jpg'; });
 
         grid.appendChild(card);
     });
@@ -124,21 +117,14 @@ async function loadFocusPage(id, type) {
     }
 
     try {
-        let data;
-        let credits;
-
-        if (type === 'movie') {
-            data = await api.getMovieDetails(id);
-            credits = await api.getMovieCredits(id);
-        } else {
-            data = await api.getSeriesDetails(id);
-            credits = await api.getSeriesCredits(id);
-        }
+        const isMovie = type === 'movie';
+        const data = await (isMovie ? api.getMovieDetails(id) : api.getSeriesDetails(id));
+        const credits = await (isMovie ? api.getMovieCredits(id) : api.getSeriesCredits(id));
 
         const media = new MediaDetails(data, type);
         renderDetails(media);
         renderCasting(credits.cast);
-    } catch (err) {
+    } catch {
         showError('Impossible de charger les détails. Veuillez réessayer.');
     }
 }
