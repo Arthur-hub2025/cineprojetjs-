@@ -17,65 +17,48 @@ function renderCards(gridId, items, type) {
 }
 
 function setActiveFilter(container, activeBtn) {
-    container.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
+    container.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     activeBtn.classList.add('active');
 }
 
-async function loadTrending(timeWindow = 'day') {
+async function loadSection(gridId, fetchFn, type, errorMsg) {
     try {
-        const data = await api.getTrending(timeWindow);
-        renderCards('grid-tendances', data.results, null);
-    } catch (err) {
-        const grid = document.getElementById('grid-tendances');
-        if (grid) grid.innerHTML = '<p class="grid-empty">Impossible de charger les tendances.</p>';
+        const data = await fetchFn();
+        renderCards(gridId, data.results, type);
+    } catch {
+        const grid = document.getElementById(gridId);
+        if (grid) grid.innerHTML = `<p class="grid-empty">${errorMsg}</p>`;
     }
 }
 
-async function loadSeries(category = 'popular') {
-    try {
-        const data = await api.getSeries(category);
-        renderCards('grid-series', data.results, 'tv');
-    } catch (err) {
-        const grid = document.getElementById('grid-series');
-        if (grid) grid.innerHTML = '<p class="grid-empty">Impossible de charger les séries.</p>';
-    }
+function loadTrending(timeWindow = 'day') {
+    return loadSection('grid-tendances', () => api.getTrending(timeWindow), null, 'Impossible de charger les tendances.');
 }
 
-async function loadMovies(category = 'popular') {
-    try {
-        const data = await api.getMovies(category);
-        renderCards('grid-films', data.results, 'movie');
-    } catch (err) {
-        const grid = document.getElementById('grid-films');
-        if (grid) grid.innerHTML = '<p class="grid-empty">Impossible de charger les films.</p>';
-    }
+function loadSeries(category = 'popular') {
+    return loadSection('grid-series', () => api.getSeries(category), 'tv', 'Impossible de charger les séries.');
 }
 
-function showSearchSection() {
-    document.getElementById('tendances').classList.add('hidden');
-    document.getElementById('series').classList.add('hidden');
-    document.getElementById('films').classList.add('hidden');
-    document.getElementById('recherche').classList.remove('hidden');
+function loadMovies(category = 'popular') {
+    return loadSection('grid-films', () => api.getMovies(category), 'movie', 'Impossible de charger les films.');
 }
 
-function hideSearchSection() {
-    document.getElementById('tendances').classList.remove('hidden');
-    document.getElementById('series').classList.remove('hidden');
-    document.getElementById('films').classList.remove('hidden');
-    document.getElementById('recherche').classList.add('hidden');
+function toggleSearch(visible) {
+    ['tendances', 'series', 'films'].forEach(id => {
+        document.getElementById(id).classList.toggle('hidden', visible);
+    });
+    document.getElementById('recherche').classList.toggle('hidden', !visible);
 }
 
 async function searchMedia(query) {
     const trimmed = query.trim();
 
     if (!trimmed) {
-        hideSearchSection();
+        toggleSearch(false);
         return;
     }
 
-    showSearchSection();
+    toggleSearch(true);
 
     const grid = document.getElementById('grid-recherche');
     const emptyMsg = document.getElementById('search-empty');
@@ -98,43 +81,19 @@ async function searchMedia(query) {
             const card = new MediaCard(item, item.media_type);
             grid.appendChild(card.render(api.imgBaseUrl));
         });
-    } catch (err) {
+    } catch {
         grid.innerHTML = '<p class="grid-empty">Une erreur est survenue lors de la recherche.</p>';
     }
 }
 
-function initTrendingFilters() {
-    const container = document.getElementById('filters-tendances');
+function initFilters(containerId, loadFn) {
+    const container = document.getElementById(containerId);
     if (!container) return;
 
     container.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             setActiveFilter(container, btn);
-            loadTrending(btn.dataset.filter);
-        });
-    });
-}
-
-function initSeriesFilters() {
-    const container = document.getElementById('filters-series');
-    if (!container) return;
-
-    container.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setActiveFilter(container, btn);
-            loadSeries(btn.dataset.filter);
-        });
-    });
-}
-
-function initMovieFilters() {
-    const container = document.getElementById('filters-films');
-    if (!container) return;
-
-    container.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setActiveFilter(container, btn);
-            loadMovies(btn.dataset.filter);
+            loadFn(btn.dataset.filter);
         });
     });
 }
@@ -150,9 +109,7 @@ function initSearch() {
     });
 
     input.addEventListener('input', () => {
-        if (input.value.trim() === '') {
-            hideSearchSection();
-        }
+        if (input.value.trim() === '') toggleSearch(false);
     });
 }
 
@@ -160,8 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTrending('day');
     loadSeries('popular');
     loadMovies('popular');
-    initTrendingFilters();
-    initSeriesFilters();
-    initMovieFilters();
+    initFilters('filters-tendances', loadTrending);
+    initFilters('filters-series', loadSeries);
+    initFilters('filters-films', loadMovies);
     initSearch();
 });
