@@ -83,13 +83,14 @@ function renderCasting(cast) {
         return;
     }
 
-    top8.forEach(actor => {
+    top8.forEach((actor, index) => {
         const photoUrl = actor.profile_path
             ? api.imgBaseUrl + actor.profile_path
             : 'assets/img/default.jpg';
 
         const card = document.createElement('div');
         card.classList.add('actor-card');
+        card.style.animationDelay = `${index * 0.04}s`;
         card.innerHTML = `
             <img src="${photoUrl}" alt="${actor.name}" loading="lazy">
             <div class="actor-card__info">
@@ -103,6 +104,24 @@ function renderCasting(cast) {
 
         grid.appendChild(card);
     });
+}
+
+function initScrollEffects() {
+    const progress = document.getElementById('scroll-progress');
+    const backToTop = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (progress && total > 0) progress.style.width = `${(scrolled / total) * 100}%`;
+        if (backToTop) backToTop.classList.toggle('visible', scrolled > 400);
+    });
+
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 }
 
 async function loadFocusPage(id, type) {
@@ -132,4 +151,5 @@ async function loadFocusPage(id, type) {
 document.addEventListener('DOMContentLoaded', () => {
     const { id, type } = getUrlParams();
     loadFocusPage(id, type);
+    initScrollEffects();
 });

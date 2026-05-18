@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap');
+
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -13,7 +15,8 @@
     --color-text: #f0f0f0;
     --color-text-muted: #999999;
     --color-border: #2e2e2e;
-    --font-main: 'Segoe UI', Arial, sans-serif;
+    --font-main: 'DM Sans', Arial, sans-serif;
+    --font-display: 'Bebas Neue', cursive;
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
@@ -79,6 +82,39 @@ input {
 
 .hidden { display: none !important; }
 
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background-color: var(--color-primary);
+    z-index: 200;
+    transition: width 0.1s linear;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background-color: var(--color-primary);
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.2s ease;
+    z-index: 99;
+    padding: 0;
+    &.visible { opacity: 1; transform: translateY(0); }
+    &:hover { background-color: var(--color-primary-hover); }
+}
+
 .section-header {
     display: flex;
     align-items: center;
@@ -86,7 +122,26 @@ input {
     flex-wrap: wrap;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
-    & h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.02em; }
+
+    & h2 {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+        padding-left: var(--spacing-md);
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 80%;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+        }
+    }
 }
 
 .filters { display: flex; gap: var(--spacing-sm); flex-wrap: wrap; }
@@ -105,6 +160,48 @@ input {
     gap: var(--spacing-lg);
 }
 
+.grid-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: var(--spacing-xl);
+    font-size: 0.9rem;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.skeleton-poster {
+    aspect-ratio: 2 / 3;
+    background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-surface-alt) 50%, var(--color-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+.skeleton-info {
+    padding: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.skeleton-line {
+    height: 11px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-surface-alt) 50%, var(--color-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    &.short { width: 55%; }
+}
+
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
@@ -114,7 +211,7 @@ input {
     background-color: var(--color-surface);
     border-radius: var(--radius-md);
     overflow: hidden;
-    animation: fadeInUp 0.3s ease both;
+    animation: fadeInUp 0.35s ease both;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     &:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
 
@@ -144,6 +241,20 @@ input {
         font-size: 0.75rem;
         font-weight: 700;
         padding: 2px 6px;
+        border-radius: var(--radius-sm);
+    }
+
+    & .media-card__type {
+        position: absolute;
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        background-color: rgba(0,0,0,0.75);
+        color: var(--color-text-muted);
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 2px 5px;
         border-radius: var(--radius-sm);
     }
 
@@ -185,10 +296,11 @@ input {
     }
 
     & .logo {
-        font-size: 1.4rem;
-        font-weight: 800;
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        font-weight: 400;
         color: var(--color-primary);
-        letter-spacing: 0.03em;
+        letter-spacing: 0.05em;
         white-space: nowrap;
         flex-shrink: 0;
         &:hover { color: var(--color-primary-hover); }
@@ -255,7 +367,13 @@ input {
     & a { color: var(--color-primary); }
 }
 
-.focus-main { max-width: var(--container-width); width: 100%; margin: 0 auto; padding: 0; gap: 0; }
+.focus-main {
+    max-width: var(--container-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    gap: 0;
+}
 
 .focus-backdrop {
     width: 100%;
@@ -296,7 +414,15 @@ input {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
-    & .focus-title { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+
+    & .focus-title {
+        font-family: var(--font-display);
+        font-size: 2.6rem;
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: 0.03em;
+    }
+
     & .focus-tagline { font-size: 1rem; color: var(--color-text-muted); font-style: italic; }
 }
 
@@ -336,7 +462,25 @@ input {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
-    & h2 { font-size: 1.25rem; font-weight: 700; }
+    & h2 {
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+        padding-left: var(--spacing-md);
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 80%;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+        }
+    }
 }
 
 .casting-grid {
@@ -350,7 +494,7 @@ input {
     border-radius: var(--radius-md);
     overflow: hidden;
     text-align: center;
-    animation: fadeInUp 0.3s ease both;
+    animation: fadeInUp 0.35s ease both;
     & img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background-color: var(--color-surface-alt); }
     & .actor-card__info {
         padding: var(--spacing-sm);
@@ -382,13 +526,15 @@ input {
         & .search-form input { width: 160px; }
     }
     .focus-poster { width: 180px; }
-    .focus-details .focus-title { font-size: 1.6rem; }
+    .focus-details .focus-title { font-size: 2rem; }
 }
 
 @media (max-width: 768px) {
-    main { gap: var(--spacing-lg); padding: var(--spacing-lg) var(--spacing-sm); }
+    main:not(.focus-main) { gap: var(--spacing-lg); padding: var(--spacing-lg) var(--spacing-sm); }
+    .focus-main { padding: 0; gap: 0; }
+
     .cards-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: var(--spacing-md); }
-    .section-header { flex-direction: column; align-items: flex-start; & h2 { font-size: 1.25rem; } }
+    .section-header { flex-direction: column; align-items: flex-start; & h2 { font-size: 1.5rem; } }
     .filter-btn { font-size: 0.8rem; padding: var(--spacing-xs) var(--spacing-sm); }
 
     .site-header {
@@ -402,7 +548,7 @@ input {
     .focus-poster { width: 160px; margin-top: -60px; }
     .focus-details {
         width: 100%;
-        & .focus-title { font-size: 1.4rem; text-align: center; }
+        & .focus-title { font-size: 1.8rem; text-align: center; }
         & .focus-tagline { text-align: center; }
     }
     .focus-meta, .focus-genres { justify-content: center; }
@@ -410,7 +556,7 @@ input {
 
 @media (max-width: 480px) {
     .cards-grid { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-sm); }
-    .section-header h2 { font-size: 1.1rem; }
+    .section-header h2 { font-size: 1.3rem; }
     .filters { gap: var(--spacing-xs); }
 
     .site-header {
@@ -424,5 +570,6 @@ input {
     }
 
     .casting-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-    .focus-details .focus-title { font-size: 1.2rem; }
+    .focus-details .focus-title { font-size: 1.5rem; }
+    .back-to-top { bottom: var(--spacing-md); right: var(--spacing-md); }
 }

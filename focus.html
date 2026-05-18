@@ -4,72 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail — CinéSite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="index.html" class="logo">CinéSite</a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="index.html#tendances">Tendances</a></li>
-                    <li><a href="index.html#series">Séries</a></li>
-                    <li><a href="index.html#films">Films</a></li>
-                </ul>
-            </nav>
-            <a href="index.html" class="back-link">← Retour</a>
-        </div>
-    </header>
+<div class="scroll-progress" id="scroll-progress"></div>
 
-    <main class="focus-main" id="focus-main">
+<header class="site-header">
+    <div class="header-inner">
+        <a href="index.html" class="logo">CinéSite</a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html#tendances">Tendances</a></li>
+                <li><a href="index.html#series">Séries</a></li>
+                <li><a href="index.html#films">Films</a></li>
+            </ul>
+        </nav>
+        <a href="index.html" class="back-link">← Retour</a>
+    </div>
+</header>
 
-        <div class="focus-backdrop" id="focus-backdrop"></div>
+<main class="focus-main" id="focus-main">
 
-        <div class="focus-content">
+    <div class="focus-backdrop" id="focus-backdrop"></div>
 
-            <aside class="focus-poster">
-                <img id="focus-poster-img" src="assets/img/default.jpg" alt="">
-            </aside>
+    <div class="focus-content">
 
-            <section class="focus-details">
+        <aside class="focus-poster">
+            <img id="focus-poster-img" src="assets/img/default.jpg" alt="">
+        </aside>
 
-                <h1 class="focus-title" id="focus-title">Chargement...</h1>
+        <section class="focus-details">
 
-                <p class="focus-tagline" id="focus-tagline"></p>
+            <h1 class="focus-title" id="focus-title">Chargement...</h1>
 
-                <ul class="focus-meta" id="focus-meta">
-                    <li class="focus-meta__item" id="focus-date"></li>
-                    <li class="focus-meta__item" id="focus-runtime"></li>
-                    <li class="focus-meta__item focus-meta__rating" id="focus-rating"></li>
-                </ul>
+            <p class="focus-tagline" id="focus-tagline"></p>
 
-                <div class="focus-genres" id="focus-genres"></div>
+            <ul class="focus-meta" id="focus-meta">
+                <li class="focus-meta__item" id="focus-date"></li>
+                <li class="focus-meta__item" id="focus-runtime"></li>
+                <li class="focus-meta__item focus-meta__rating" id="focus-rating"></li>
+            </ul>
 
-                <div class="focus-overview">
-                    <h2>Synopsis</h2>
-                    <p id="focus-overview">Chargement...</p>
-                </div>
+            <div class="focus-genres" id="focus-genres"></div>
 
-            </section>
+            <div class="focus-overview">
+                <h2>Synopsis</h2>
+                <p id="focus-overview">Chargement...</p>
+            </div>
 
-        </div>
-
-        <section class="focus-casting" id="focus-casting">
-            <h2>Casting</h2>
-            <div class="casting-grid" id="casting-grid"></div>
         </section>
 
-    </main>
+    </div>
 
-    <footer class="site-footer">
-        <p>Données fournies par <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a></p>
-    </footer>
+    <section class="focus-casting" id="focus-casting">
+        <h2>Casting</h2>
+        <div class="casting-grid" id="casting-grid"></div>
+    </section>
 
-    <script src="assets/js/api.js"></script>
-    <script src="assets/js/classes/MediaCard.js"></script>
-    <script src="assets/js/classes/MediaDetails.js"></script>
-    <script src="assets/js/focus.js"></script>
+</main>
+
+<footer class="site-footer">
+    <p>Données fournies par <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a></p>
+</footer>
+
+<button class="back-to-top" id="back-to-top" aria-label="Retour en haut">↑</button>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/classes/MediaCard.js"></script>
+<script src="assets/js/classes/MediaDetails.js"></script>
+<script src="assets/js/focus.js"></script>
 
 </body>
 </html>

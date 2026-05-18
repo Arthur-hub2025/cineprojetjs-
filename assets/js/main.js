@@ -1,5 +1,22 @@
 const api = new TMDBApi();
 
+function showSkeletons(gridId, count = 8) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        grid.innerHTML += `
+            <div class="skeleton-card">
+                <div class="skeleton-poster"></div>
+                <div class="skeleton-info">
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+            </div>
+        `;
+    }
+}
+
 function renderCards(gridId, items, type) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
@@ -10,9 +27,11 @@ function renderCards(gridId, items, type) {
         return;
     }
 
-    items.forEach(item => {
+    items.forEach((item, index) => {
         const card = new MediaCard(item, type);
-        grid.appendChild(card.render(api.imgBaseUrl));
+        const el = card.render(api.imgBaseUrl);
+        el.style.animationDelay = `${index * 0.04}s`;
+        grid.appendChild(el);
     });
 }
 
@@ -22,6 +41,7 @@ function setActiveFilter(container, activeBtn) {
 }
 
 async function loadSection(gridId, fetchFn, type, errorMsg) {
+    showSkeletons(gridId);
     try {
         const data = await fetchFn();
         renderCards(gridId, data.results, type);
@@ -63,7 +83,7 @@ async function searchMedia(query) {
     const grid = document.getElementById('grid-recherche');
     const emptyMsg = document.getElementById('search-empty');
 
-    grid.innerHTML = '';
+    showSkeletons('grid-recherche');
     emptyMsg.classList.add('hidden');
 
     try {
@@ -73,14 +93,12 @@ async function searchMedia(query) {
         );
 
         if (filtered.length === 0) {
+            grid.innerHTML = '';
             emptyMsg.classList.remove('hidden');
             return;
         }
 
-        filtered.forEach(item => {
-            const card = new MediaCard(item, item.media_type);
-            grid.appendChild(card.render(api.imgBaseUrl));
-        });
+        renderCards('grid-recherche', filtered, null);
     } catch {
         grid.innerHTML = '<p class="grid-empty">Une erreur est survenue lors de la recherche.</p>';
     }
@@ -113,6 +131,24 @@ function initSearch() {
     });
 }
 
+function initScrollEffects() {
+    const progress = document.getElementById('scroll-progress');
+    const backToTop = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (progress && total > 0) progress.style.width = `${(scrolled / total) * 100}%`;
+        if (backToTop) backToTop.classList.toggle('visible', scrolled > 400);
+    });
+
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     loadTrending('day');
     loadSeries('popular');
@@ -121,4 +157,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initFilters('filters-series', loadSeries);
     initFilters('filters-films', loadMovies);
     initSearch();
+    initScrollEffects();
 });

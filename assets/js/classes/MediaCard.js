@@ -23,6 +23,10 @@ class MediaCard {
         return parseFloat(rating).toFixed(1);
     }
 
+    getTypeLabel() {
+        return this.type === 'tv' ? 'Série' : 'Film';
+    }
+
     render(imgBaseUrl) {
         const posterUrl = this.poster
             ? imgBaseUrl + this.poster
@@ -36,6 +40,7 @@ class MediaCard {
                 <div class="media-card__poster">
                     <img src="${posterUrl}" alt="${this.title}" loading="lazy">
                     <span class="media-card__badge">${this.formatRating(this.rating)}</span>
+                    <span class="media-card__type">${this.getTypeLabel()}</span>
                 </div>
                 <div class="media-card__info">
                     <h3 class="media-card__title">${this.title}</h3>

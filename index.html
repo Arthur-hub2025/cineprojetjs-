@@ -4,89 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CinéSite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="index.html" class="logo">CinéSite</a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#tendances">Tendances</a></li>
-                    <li><a href="#series">Séries</a></li>
-                    <li><a href="#films">Films</a></li>
-                </ul>
-            </nav>
-            <form class="search-form" id="search-form" role="search">
-                <input
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<header class="site-header">
+    <div class="header-inner">
+        <a href="index.html" class="logo">CinéSite</a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#tendances">Tendances</a></li>
+                <li><a href="#series">Séries</a></li>
+                <li><a href="#films">Films</a></li>
+            </ul>
+        </nav>
+        <form class="search-form" id="search-form" role="search">
+            <input
                     type="search"
                     id="search-input"
                     name="q"
                     placeholder="Rechercher un film, une série..."
                     autocomplete="off"
-                >
-                <button type="submit">Rechercher</button>
-            </form>
+            >
+            <button type="submit">Rechercher</button>
+        </form>
+    </div>
+</header>
+
+<main>
+
+    <section class="section-tendances" id="tendances">
+        <div class="section-header">
+            <h2>Tendances</h2>
+            <div class="filters" id="filters-tendances">
+                <button class="filter-btn active" data-filter="day">Aujourd'hui</button>
+                <button class="filter-btn" data-filter="week">Cette semaine</button>
+            </div>
         </div>
-    </header>
+        <div class="cards-grid" id="grid-tendances"></div>
+    </section>
 
-    <main>
-
-        <section class="section-tendances" id="tendances">
-            <div class="section-header">
-                <h2>Tendances</h2>
-                <div class="filters" id="filters-tendances">
-                    <button class="filter-btn active" data-filter="day">Aujourd'hui</button>
-                    <button class="filter-btn" data-filter="week">Cette semaine</button>
-                </div>
+    <section class="section-series" id="series">
+        <div class="section-header">
+            <h2>Séries</h2>
+            <div class="filters" id="filters-series">
+                <button class="filter-btn active" data-filter="popular">Populaires</button>
+                <button class="filter-btn" data-filter="top_rated">Les mieux notées</button>
+                <button class="filter-btn" data-filter="on_the_air">En cours</button>
             </div>
-            <div class="cards-grid" id="grid-tendances"></div>
-        </section>
+        </div>
+        <div class="cards-grid" id="grid-series"></div>
+    </section>
 
-        <section class="section-series" id="series">
-            <div class="section-header">
-                <h2>Séries</h2>
-                <div class="filters" id="filters-series">
-                    <button class="filter-btn active" data-filter="popular">Populaires</button>
-                    <button class="filter-btn" data-filter="top_rated">Les mieux notées</button>
-                    <button class="filter-btn" data-filter="on_the_air">En cours</button>
-                </div>
+    <section class="section-films" id="films">
+        <div class="section-header">
+            <h2>Films</h2>
+            <div class="filters" id="filters-films">
+                <button class="filter-btn active" data-filter="popular">Populaires</button>
+                <button class="filter-btn" data-filter="top_rated">Les mieux notés</button>
+                <button class="filter-btn" data-filter="upcoming">À venir</button>
+                <button class="filter-btn" data-filter="now_playing">En ce moment</button>
             </div>
-            <div class="cards-grid" id="grid-series"></div>
-        </section>
+        </div>
+        <div class="cards-grid" id="grid-films"></div>
+    </section>
 
-        <section class="section-films" id="films">
-            <div class="section-header">
-                <h2>Films</h2>
-                <div class="filters" id="filters-films">
-                    <button class="filter-btn active" data-filter="popular">Populaires</button>
-                    <button class="filter-btn" data-filter="top_rated">Les mieux notés</button>
-                    <button class="filter-btn" data-filter="upcoming">À venir</button>
-                    <button class="filter-btn" data-filter="now_playing">En ce moment</button>
-                </div>
-            </div>
-            <div class="cards-grid" id="grid-films"></div>
-        </section>
+    <section class="section-recherche hidden" id="recherche">
+        <div class="section-header">
+            <h2>Résultats de recherche</h2>
+        </div>
+        <div class="cards-grid" id="grid-recherche"></div>
+        <p class="search-empty hidden" id="search-empty">Aucun résultat trouvé.</p>
+    </section>
 
-        <section class="section-recherche hidden" id="recherche">
-            <div class="section-header">
-                <h2>Résultats de recherche</h2>
-            </div>
-            <div class="cards-grid" id="grid-recherche"></div>
-            <p class="search-empty hidden" id="search-empty">Aucun résultat trouvé.</p>
-        </section>
+</main>
 
-    </main>
+<footer class="site-footer">
+    <p>Données fournies par <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a></p>
+</footer>
 
-    <footer class="site-footer">
-        <p>Données fournies par <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a></p>
-    </footer>
+<button class="back-to-top" id="back-to-top" aria-label="Retour en haut">↑</button>
 
-    <script src="assets/js/api.js"></script>
-    <script src="assets/js/classes/MediaCard.js"></script>
-    <script src="assets/js/classes/MediaDetails.js"></script>
-    <script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/classes/MediaCard.js"></script>
+<script src="assets/js/classes/MediaDetails.js"></script>
+<script src="assets/js/main.js"></script>
 
 </body>
 </html>
